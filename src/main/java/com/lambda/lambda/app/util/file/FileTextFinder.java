@@ -14,9 +14,6 @@ import com.lambda.lambda.common.util.string.StringMap;
 import com.lambda.lambda.common.util.string.StringMapMap;
 
 public final class FileTextFinder {
-    // Class Fields
-    private static final List<String> TEXT_EXTENSION_LIST = FileTextFinder.makeTextExtensionList();
-
     // Instance Fields
     private String rootFolderPath;
     private String targetText;
@@ -37,8 +34,7 @@ public final class FileTextFinder {
         StringMapMap findings = StringMapMap.newInstance();
         FileHelper.forEachFileDescendant(rootFolderPath, (File file) -> {
             String path = FilePathHelper.getAbsolutePath(file);
-            boolean isTextExtension =
-                    FilePathHelper.isMatchingExtension(path, FileTextFinder.TEXT_EXTENSION_LIST);
+            boolean isTextExtension = FilePathHelper.hasTextFileExtension(path);
             ConditionalHelper.ifThen(isTextExtension, () -> this.appendFindings(findings, path));
         });
         return findings.toStringList();
@@ -61,22 +57,5 @@ public final class FileTextFinder {
     private void reset(String rootFolderPath, String targetText) {
         this.rootFolderPath = StringTrimmerHelper.trimSurroundingWhiteSpace(rootFolderPath);
         this.targetText = targetText;
-    }
-
-    private static List<String> makeTextExtensionList() {
-        List<String> textExtensionList = ListHelper.newArrayList();
-        ListHelper.add(textExtensionList, ".css");
-        ListHelper.add(textExtensionList, ".env");
-        ListHelper.add(textExtensionList, ".gitignore");
-        ListHelper.add(textExtensionList, ".html");
-        ListHelper.add(textExtensionList, ".java");
-        ListHelper.add(textExtensionList, ".js");
-        ListHelper.add(textExtensionList, ".md");
-        ListHelper.add(textExtensionList, ".ts");
-        ListHelper.add(textExtensionList, ".tsx");
-        ListHelper.add(textExtensionList, ".txt");
-        ListHelper.add(textExtensionList, ".xml");
-        ListHelper.add(textExtensionList, ".yml");
-        return textExtensionList;
     }
 }

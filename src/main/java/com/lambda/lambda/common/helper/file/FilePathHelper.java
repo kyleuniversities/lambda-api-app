@@ -17,6 +17,9 @@ import com.lambda.lambda.common.helper.string.StringReplacementHelper;
  * Helper class for File Path Operations
  */
 public class FilePathHelper {
+    // Class Fields
+    private static final List<String> TEXT_EXTENSION_LIST = FilePathHelper.makeTextExtensionList();
+
     /**
      * Gets the absolute path of a file
      */
@@ -83,6 +86,13 @@ public class FilePathHelper {
     }
 
     /**
+     * Checks if a path has the extension of a text file
+     */
+    public static boolean hasTextFileExtension(String path) {
+        return FilePathHelper.isMatchingExtension(path, FilePathHelper.TEXT_EXTENSION_LIST);
+    }
+
+    /**
      * Checks if a path has a matching extension
      */
     public static boolean isMatchingExtension(String path, List<String> extensionList) {
@@ -102,5 +112,26 @@ public class FilePathHelper {
      */
     private FilePathHelper() {
         super();
+    }
+
+    /**
+     * Makes a list of text file extensions
+     */
+    private static List<String> makeTextExtensionList() {
+        List<String> textExtensionList = ListHelper.newArrayList();
+        ListHelper.add(textExtensionList, ".css");
+        ListHelper.add(textExtensionList, ".env");
+        ListHelper.add(textExtensionList, ".gitignore");
+        ListHelper.add(textExtensionList, ".html");
+        ListHelper.add(textExtensionList, ".java");
+        ListHelper.add(textExtensionList, ".js");
+        ListHelper.add(textExtensionList, ".md");
+        ListHelper.add(textExtensionList, ".py");
+        ListHelper.add(textExtensionList, ".ts");
+        ListHelper.add(textExtensionList, ".tsx");
+        ListHelper.add(textExtensionList, ".txt");
+        ListHelper.add(textExtensionList, ".xml");
+        ListHelper.add(textExtensionList, ".yml");
+        return textExtensionList;
     }
 }

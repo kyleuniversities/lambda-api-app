@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOError;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.Buffer;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -16,12 +17,36 @@ import com.lambda.lambda.common.helper.ConditionalHelper;
 import com.lambda.lambda.common.helper.ExceptionHelper;
 import com.lambda.lambda.common.helper.FunctionHelper;
 import com.lambda.lambda.common.helper.ListHelper;
+import com.lambda.lambda.common.helper.string.StringHelper;
 import com.lambda.lambda.common.util.string.StringList;
 
 /**
  * Helper class for File Operations
  */
 public class FileHelper {
+    /**
+     * Exports lines as into a text file
+     */
+    public static void exportStringList(Iterable<String> lines, String path) {
+        try {
+            PrintWriter writer = FileHelper.newPrintWriter(path);
+            for (String line : lines) {
+                writer.println(line);
+            }
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExceptionHelper.throwNewIllegalStateException(e.getMessage());
+        }
+    }
+
+    /**
+     * Exports lines as into a text file
+     */
+    public static void exportText(String text, String path) {
+        FileHelper.exportStringList(StringHelper.split(text, "[\n]"), path);
+    }
+
     /**
      * Iterates through each file in directly within a directory
      */
@@ -80,6 +105,13 @@ public class FileHelper {
     }
 
     /**
+     * Gets the lines of a text file as a String
+     */
+    public static String getText(String path) {
+        return StringHelper.join(FileHelper.getStringList(path), "\n");
+    }
+
+    /**
      * Lists the file children of a folder File
      */
     public static List<File> listFiles(File file) {
@@ -98,6 +130,13 @@ public class FileHelper {
      */
     public static File newFile(String path) {
         return new File(path);
+    }
+
+    /**
+     * Creates a new Print Writer object
+     */
+    public static PrintWriter newPrintWriter(String path) throws IOException {
+        return new PrintWriter(path);
     }
 
     /**
