@@ -29,8 +29,7 @@ public final class JavaController {
 
     @PostMapping("/function")
     public String function(@RequestBody LambdaArguments lambdaArguments) {
-        StringList classLines =
-                JavaFunctionClassMaker.newInstance().make(lambdaArguments.getBodyText());
+        StringList classLines = JavaFunctionClassMaker.newInstance().make(lambdaArguments.getBodyText());
         String classLinesText = classLines.toString();
         return CodeHelper.toCode(classLinesText);
     }
@@ -48,24 +47,22 @@ public final class JavaController {
 
     @PostMapping("/void")
     public String voidMethods(@RequestBody LambdaArguments lambdaArguments) {
-        StringList methodLines =
-                JavaVoidMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
+        String domainText = lambdaArguments.getApparentArgument(0);
+        StringList methodLines = JavaVoidMethodsMaker.newInstance(domainText).make(lambdaArguments.getBodyText());
         String methodLinesText = methodLines.toString();
         return CodeHelper.toCode(methodLinesText);
     }
 
-    @PostMapping({"/get", "/getter", "/getters"})
+    @PostMapping({ "/get", "/getter", "/getters" })
     public String getterMethods(@RequestBody LambdaArguments lambdaArguments) {
-        StringList methodLines =
-                JavaGetterMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
+        StringList methodLines = JavaGetterMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
         String methodLinesText = methodLines.toString();
         return CodeHelper.toCode(methodLinesText);
     }
 
-    @PostMapping({"/set", "/setter", "/setters"})
+    @PostMapping({ "/set", "/setter", "/setters" })
     public String setterMethods(@RequestBody LambdaArguments lambdaArguments) {
-        StringList methodLines =
-                JavaSetterMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
+        StringList methodLines = JavaSetterMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
         String methodLinesText = methodLines.toString();
         return CodeHelper.toCode(methodLinesText);
     }

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import com.lambda.lambda.app.helper.CodeHelper;
+import com.lambda.lambda.common.helper.ConditionalHelper;
 import com.lambda.lambda.common.helper.ListHelper;
 import com.lambda.lambda.common.helper.MapHelper;
 import com.lambda.lambda.common.helper.string.StringHelper;
@@ -43,6 +44,11 @@ public final class LambdaArguments {
 
     public String getArgument(int index) {
         return this.arguments.get(index);
+    }
+
+    public String getApparentArgument(int index) {
+        return ConditionalHelper.newTernaryOperation(index < this.arguments.size(), () -> this.getArgument(index),
+                () -> null);
     }
 
     public int getIntegerArgument(int index) {
@@ -96,6 +102,11 @@ public final class LambdaArguments {
 
     public boolean environmentContainsKey(String key) {
         return this.environment.containsKey(key);
+    }
+
+    // Operant Methods
+    public boolean firstArgumentIsTrue() {
+        return this.arguments.size() > 0 && this.getBooleanArgument(0);
     }
 
     // Iteration Methods
