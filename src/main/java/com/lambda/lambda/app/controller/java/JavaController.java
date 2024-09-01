@@ -10,6 +10,9 @@ import com.lambda.lambda.app.util.LambdaArguments;
 import com.lambda.lambda.app.util.java.JavaFolderCopier;
 import com.lambda.lambda.app.util.java.JavaFunctionClassMaker;
 import com.lambda.lambda.app.util.java.JavaGetterMethodsMaker;
+import com.lambda.lambda.app.util.java.JavaListImplementer;
+import com.lambda.lambda.app.util.java.JavaMapImplementer;
+import com.lambda.lambda.app.util.java.JavaSetImplementer;
 import com.lambda.lambda.app.util.java.JavaSetterMethodsMaker;
 import com.lambda.lambda.app.util.java.JavaStructureClassMaker;
 import com.lambda.lambda.app.util.java.JavaVoidMethodsMaker;
@@ -65,5 +68,30 @@ public final class JavaController {
         StringList methodLines = JavaSetterMethodsMaker.newInstance().make(lambdaArguments.getBodyText());
         String methodLinesText = methodLines.toString();
         return CodeHelper.toCode(methodLinesText);
+    }
+
+    @PostMapping("/implement/list")
+    public String implementList(@RequestBody LambdaArguments lambdaArguments) {
+        StringList classLines = JavaListImplementer.newInstance()
+                .implement(lambdaArguments.getArgument(0), lambdaArguments.getApparentArgument(1));
+        String classLinesText = classLines.toString();
+        return CodeHelper.toCode(classLinesText);
+    }
+
+    @PostMapping("/implement/set")
+    public String implementSet(@RequestBody LambdaArguments lambdaArguments) {
+        StringList classLines = JavaSetImplementer.newInstance()
+                .implement(lambdaArguments.getArgument(0), lambdaArguments.getApparentArgument(1));
+        String classLinesText = classLines.toString();
+        return CodeHelper.toCode(classLinesText);
+    }
+
+    @PostMapping("/implement/map")
+    public String implementMap(@RequestBody LambdaArguments lambdaArguments) {
+        StringList classLines = JavaMapImplementer.newInstance()
+                .implement(lambdaArguments.getArgument(0), lambdaArguments.getArgument(1),
+                        lambdaArguments.getApparentArgument(2));
+        String classLinesText = classLines.toString();
+        return CodeHelper.toCode(classLinesText);
     }
 }
