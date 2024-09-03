@@ -43,6 +43,14 @@ public final class StringList extends ArrayList<String> {
         return Boolean.parseBoolean(this.get(index));
     }
 
+    public StringList getTokens(int index) {
+        return this.getTokens(index, "[ ]+");
+    }
+
+    public StringList getTokens(int index, String regex) {
+        return StringHelper.split(this.get(index), regex);
+    }
+
     // Operant Methods
     public StringList copy() {
         StringList copy = StringHelper.newStringList();

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.lambda.lambda.app.helper.CodeHelper;
 import com.lambda.lambda.app.util.LambdaArguments;
+import com.lambda.lambda.app.util.string.StringCasedReplacer;
 import com.lambda.lambda.app.util.string.StringSerialReplacer;
 import com.lambda.lambda.common.helper.ConditionalHelper;
 import com.lambda.lambda.common.helper.IterationHelper;
@@ -54,6 +55,15 @@ public final class StringController {
         return CodeHelper.toCode(replaced);
     }
 
+    @PostMapping("/replace/cased")
+    public String replaceCased(@RequestBody LambdaArguments lambdaArguments) {
+        String bodyText = lambdaArguments.getBodyText();
+        String target = lambdaArguments.getArgument(0);
+        String replacement = lambdaArguments.getArgument(1);
+        String replaced = StringCasedReplacer.newInstance().replaceAll(bodyText, target, replacement);
+        return CodeHelper.toCode(replaced);
+    }
+
     @PostMapping("/replace/serial")
     public String replaceSerial(@RequestBody LambdaArguments lambdaArguments) {
         String bodyText = lambdaArguments.getBodyText();
@@ -61,13 +71,11 @@ public final class StringController {
         boolean numberOfReplacementsPerInstanceIsSpecified = arguments.get(0).equals("--n");
         int numberOfReplacementsPerInstance = ConditionalHelper.newTernaryOperation(
                 numberOfReplacementsPerInstanceIsSpecified, () -> arguments.getInteger(1), () -> 1);
-        int indexShift =
-                ConditionalHelper.ifReturnElse(numberOfReplacementsPerInstanceIsSpecified, 2, 0);
+        int indexShift = ConditionalHelper.ifReturnElse(numberOfReplacementsPerInstanceIsSpecified, 2, 0);
         String target = arguments.get(indexShift);
         List<String> replacements = arguments.subList(1 + indexShift, arguments.size());
         StringSerialReplacer replacer = StringSerialReplacer.newInstance();
-        String replaced =
-                replacer.replace(target, numberOfReplacementsPerInstance, replacements, bodyText);
+        String replaced = replacer.replace(target, numberOfReplacementsPerInstance, replacements, bodyText);
         return CodeHelper.toCode(replaced);
     }
 }
